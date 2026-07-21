@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_allot_asset,allot.asset,model_allot_asset,,1,1,1,1
+access_allot_asset_line,allot.asset.line,model_allot_asset_line,,1,1,1,1
+access_asset_return_wizard,asset.return.wizard,model_asset_return_wizard,,1,1,1,1
+access_project_task_product_line,project.task.product.line,model_project_task_product_line,,1,1,1,1
+access_maintenance_request,maintenance.request,model_maintenance_request,,1,1,1,1
+access_consumed_material,consumed.material,model_consumed_material,,1,1,1,1
+access_maintenance_scrap_wizard,maintenance.scrap.wizard,model_maintenance_scrap_wizard,,1,1,1,1
+access_asset_planning,asset.planning,model_asset_planning,,1,1,1,1
+access_asset_planning_line,asset.planning.line,model_asset_planning_line,,1,1,1,1

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_view_asset_projects" model="ir.actions.act_window">
+        <field name="name">Projects</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="project.project_kanban_view_group_stage"/>
+        <field name="search_view_id" ref="project.view_project_project_filter"/>
+        <field name="domain">[('_is_asset', '=', True)]</field>
+        <field name="context">{'default__is_asset': True}</field>
+        <field name="help" type="html">
+            <p>
+                Create and manage your project Asset
+            </p>
+        </field>
+    </record>
+
+
+    <record id="action_view_assets" model="ir.actions.act_window">
+        <field name="name">Assets</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="product.product_kanban_view"/>
+        <field name="search_view_id" ref="stock.stock_product_search_form_view"/>
+        <field name="domain">[('is_asset_product', '=', True)]</field>
+        <field name="context">{'default_is_asset_product': True}</field>
+        <field name="help" type="html">
+            <p>
+                Create and manage your Product Asset
+            </p>
+        </field>
+    </record>
+
+    <record id="action_view_occupancy_listing" model="ir.actions.act_window">
+        <field name="name">Occupancy</field>
+        <field name="res_model">stock.quant</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_internal_loc': 1, 'search_default_productgroup':1,
+            'search_default_locationgroup':1, 'inventory_mode':True}
+        </field>
+
+        <field name="help" type="html">
+            <p>
+                Create and manage
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem
+            name="Asset Management"
+            id="menu_asset_management"
+            active="True"
+            web_icon="asset_managemnet_customization,static/description/downlsp.png"
+            sequence="10">
+
+        <menuitem id="menu_product_asset"
+                  name="Assets"
+                  action="action_view_assets"
+                  sequence="5"/>
+
+        <menuitem id="menu_project_asset"
+                  name="Projects"
+                  action="action_view_asset_projects"
+                  sequence="10"/>
+        <menuitem id="menu_occupancy_listing"
+                  name="Occupancy Listing"
+                  action="action_view_occupancy_listing"
+                  sequence="12"/>
+
+
+    </menuitem>
+</odoo>

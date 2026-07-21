@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_maintenance_request_form" model="ir.ui.view">
+        <field name="name">maintenance.request.form</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <form string="Maintenance Request">
+                <header>
+                    <field name="stage" widget="statusbar"
+                           options="{'clickable': '0', 'fold_field': 'fold'}"
+                           nolabel="1" readonly="1"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            invisible="stage != 'draft'"
+                            class="oe_highlight"/>
+                    <button name="action_start" string="Start Process" type="object"
+                            invisible="stage != 'approve' or stage == 'approve' and stage_type in ['start','in_progress','completed']"
+                            class="oe_highlight"/>
+                    <button name="action_in_progress" string="In Progress" type="object"
+                            invisible="stage_type != 'start'"
+                            class="oe_highlight"/>
+                    <button name="action_scrap" string="Scrap" type="object"
+                            invisible="stage_type != 'in_progress'"
+                            class="oe_highlight"/>
+                    <button name="action_completed" string="Completed" type="object"
+                            invisible="stage_type != 'in_progress'"
+                            class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Start" bg_color="text-bg-info"
+                            invisible="stage_type != 'start'"/>
+                    <widget name="web_ribbon" title="In progress" bg_color="text-bg-warning"
+                            invisible="stage_type != 'in_progress'"/>
+                    <widget name="web_ribbon" title="Scrap" bg_color="text-bg-danger"
+                            invisible="stage_type != 'scrap'"/>
+                    <widget name="web_ribbon" title="Completed" bg_color="text-bg-success"
+                            invisible="stage_type != 'completed'"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="sequence_code" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id" readonly="stage != 'draft'"  required="1"/>
+                            <field name="quantity" required="1" readonly="stage != 'draft'"/>
+                            <field name="uom_id" required="1" readonly="stage != 'draft'"/>
+                            <field name="date_today" readonly="stage != 'draft'"/>
+                            <field name="stage_type" readonly="1" widget="badge"/>
+                        </group>
+                        <group>
+                            <field name="asset_id" readonly="1"/>
+                            <field name="location_id" readonly="1"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="scrap_qty" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Consumed Goods" name="consumed_goods" invisible="stage_type != 'in_progress'">
+                            <field name="consumed_ids" widget="one2many">
+                                <list string="Consumed Goods" editable="bottom">
+                                    <field name="maintenance_id" column_invisible="1"/>
+                                    <field name="item_id" required="1"/>
+                                    <field name="qty" required="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                 <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_maintenance_request_tree" model="ir.ui.view">
+        <field name="name">maintenance.request.tree</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence_code" readonly="1"/>
+                <field name="project_id" readonly="1"/>
+                <field name="asset_id" readonly="1"/>
+                <field name="quantity" readonly="1"/>
+                <field name="location_id" readonly="1"/>
+                <field name="stage" readonly="1"/>
+                <field name="stage_type" readonly="1" widget="badge"
+                       decoration-info="stage_type == 'start'"
+                       decoration-warning="stage_type == 'in_progress'"
+                       decoration-success="stage_type == 'completed'"
+                       decoration-danger="stage_type == 'scrap'"
+                />
+            </list>
+        </field>
+    </record>
+
+
+    <record id="view_maintenance_request_kanban" model="ir.ui.view">
+        <field name="name">maintenance.request.kanban.view</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <kanban sample="1" readonly="1" records_draggable="0" quick_create="false" default_group_by="stage">
+                <field name="sequence_code" readonly="1"/>
+                <field name="project_id" readonly="1"/>
+                <field name="asset_id" readonly="1"/>
+                <field name="quantity" readonly="1"/>
+                <field name="location_id" readonly="1"/>
+                <field name="stage" readonly="1"/>
+                <field name="stage_type" readonly="1" widget="badge"
+                />
+                <templates>
+                <t t-name="card">
+                        <div class="oe_kanban_details oe_kanban_global_click oe_kanban_content oe_kanban_card">
+                            <div style="float:right;">
+                                <field name="stage_type" readonly="1" widget="badge"
+                                       decoration-info="stage_type == 'start'"
+                                       decoration-warning="stage_type == 'in_progress'"
+                                       decoration-success="stage_type == 'completed'"
+                                       decoration-danger="stage_type == 'scrap'"
+                                />
+                            </div>
+                            <div class="o_kanban_card_header float-right">
+                                <strong>
+                                    <h3>
+                                        <field name="sequence_code" style="color:green;"/>
+                                    </h3>
+                                </strong>
+                            </div>
+                            <div class="row">
+                                <div class="float-left col-md-12">
+                                    <span class="float-left" style="color:blue;">
+                                        Project :
+                                        <field name="project_id"/>
+                                    </span>
+                                    <br></br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="float-left col-md-12" style="color:purple;">
+                                    Asset :
+                                    <field name="asset_id"/>
+                                </div>
+                            </div>
+                            <div class="row maintenance_page">
+                                <div class="col-md-12">
+                                    <span class="float-left">
+                                        <strong>Location :</strong>
+                                        <field name="location_id"/>
+                                        <br></br>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_maintenance_request_search" model="ir.ui.view">
+        <field name="name">maintenance.request.search</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="asset_id"/>
+                <field name="location_id"/>
+                <field name="stage"/>
+
+                <!-- Add a filter for the 'stage' field -->
+                <filter name="filter_draft" string="Draft" domain="[('stage', '=', 'draft')]"/>
+                <filter name="filter_approve" string="Approved" domain="[('stage', '=', 'approve')]"/>
+                <filter name="filter_done" string="Done" domain="[('stage', '=', 'done')]"/>
+                <group>
+                    <field name="project_id"/>
+                    <field name="asset_id"/>
+                    <field name="stage"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="action_maintenance_request" model="ir.actions.act_window">
+        <field name="name">Maintenance Requests</field>
+        <field name="res_model">maintenance.request</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="view_maintenance_request_kanban"/>
+        <field name="search_view_id" ref="view_maintenance_request_search"/>
+        <field name="context">{'create': False,'delete': False}</field>
+        <field name="help" type="html">
+            <p>
+                Create and manage your Maintenance Request
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            name="Maintenance Requests"
+            id="maintenance_request_menu"
+            web_icon="asset_managemnet_customization,static/description/maintep.png"
+            active="True"
+            sequence="10">
+
+        <menuitem id="maintenance_request_submenu"
+                  name="Maintenance Requests"
+                  action="action_maintenance_request"
+                  sequence="5"/>
+    </menuitem>
+
+</odoo>

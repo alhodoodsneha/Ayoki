@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_over_time_calculation_request" model="ir.sequence">
+            <field name="name">Over Time Calculation</field>
+            <field name="code">over.time.calculation</field>
+            <field name="prefix">OTM/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+        </record>
+
+    </data>
+</odoo>

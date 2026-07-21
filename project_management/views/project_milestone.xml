@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="project_milestone_view_form_alhadeed" model="ir.ui.view">
+        <field name="name">project.milestone.view.form.alhadeed</field>
+        <field name="model">project.milestone</field>
+        <field name="arch" type="xml">
+            <form string="Milestone">
+                <header>
+                    <field name="state" widget="statusbar" readonly="1"/>
+                    <button name="action_set_pending" string="Set to Pending" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_set_in_progress" string="Set to In Progress" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'pending'"/>
+                    <button name="action_set_completed" string="Set to Completed" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'in_progress'"/>
+                     <button name="action_verify_project"
+                        string="Project Verify"
+                       groups="project_management.group_project_milestone_modifier"
+                       invisible="project_verified == True"
+                        type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(project.action_view_task_from_milestone)d"
+                                type="action"
+                                class="oe_stat_button"
+                                icon="fa-tasks"
+                                context="{'default_project_id': project_id}"
+                                groups="project.group_project_milestone"
+                                close="1"
+                        >
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="task_count" nolabel="1"/>
+                                    <span class="fw-normal">Tasks</span>
+                                </span>
+                                <span class="o_stat_value" invisible="done_task_count == 0">
+                                    <field name="done_task_count" nolabel="1"/>
+                                    <span class="fw-normal">Done</span>
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                    <label for="name"/>
+                    <h1>
+                        <field name="name"  readonly="project_verified == True  and is_project_modifier == False"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="project_id" domain="[('allow_milestones', '=', True)]" readonly="project_verified == True  and is_project_modifier == False" />
+                              <field name="planned_start_date" readonly="project_verified == True  and is_project_modifier == False"/>
+                            <field name="deadline" readonly="project_verified == True  and is_project_modifier == False" string="Planned End date"/>
+                            <field name="start_date" readonly="project_verified == True  and is_project_modifier == False"/>
+                            <field name="planned_end_date" readonly="project_verified == True  and is_project_modifier == False"/>
+                            <field name="starting_delay" readonly="project_verified == True  and is_project_modifier == False"/>
+                            <field name="weightage_progress" readonly="project_verified == True  and is_project_modifier == False"/>
+                            <field name="weightage_progress" optional="show" readonly="1"
+                                   widget="progressbar" string="Progress Bar"/>
+
+                        </group>
+                        <group>
+                            <field name="weightage" readonly="project_verified == True  and is_project_modifier == False"/>
+                            <field name="duration" readonly="1"/>
+                            <field name="closing_delay" rreadonly="project_verified == True  and is_project_modifier == False"/>
+                            <field name="is_reached"/>
+                            <field name="remark"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="project_milestone_view_tree_inherited_alhadeed" model="ir.ui.view">
+        <field name="name">project.milestone.view.inherit.alhadeed</field>
+        <field name="model">project.milestone</field>
+        <field name="arch" type="xml">
+            <list string="Milestone" create="1" delete="1" decoration-success="can_be_marked_as_done"
+                  decoration-danger="is_deadline_exceeded and not can_be_marked_as_done" decoration-muted="is_reached">
+                <field name="name" readonly="project_verified == True  and is_project_modifier == False"/>
+                <field name="project_id" domain="[('allow_milestones', '=', True)]"/>
+                <field name="weightage_progress" />
+                 <field name="planned_start_date" optional="show" readonly="project_verified == True  and is_project_modifier == False"/>
+                <field name="deadline" readonly="project_verified == True  and is_project_modifier == False" string="Planned End Date"/>
+                <field name="start_date" readonly="project_verified == True  and is_project_modifier == False"/>
+                 <field name="planned_end_date" optional="show" readonly="project_verified == True  and is_project_modifier == False"/>
+                <field name="duration" readonly="1"/>
+                <field name="starting_delay" optional="show"/>
+                <field name="closing_delay" optional="show"/>
+                <field name="is_reached" optional="show"/>
+                <field name="remark" optional="hide"/>
+                <field name="is_deadline_exceeded" column_invisible="True"/>
+                <field name="task_count" column_invisible="True"/>
+                <field name="can_be_marked_as_done" column_invisible="True"/>
+                <field name="state" readonly="1"/>
+                <button name="action_view_tasks"
+                        type="object"
+                        title="View Tasks"
+                        string="View Tasks"
+                        class="btn btn-link float-end"
+                        invisible="task_count == 0"
+                />
+                <button name="action_set_pending" string="Set to Pending" type="object"
+                        class="oe_highlight"
+                        invisible="state != 'draft'"/>
+                <button name="action_set_in_progress" string="Set to In Progress" type="object"
+                        class="oe_highlight"
+                        invisible="state != 'pending'"/>
+                <button name="action_set_completed" string="Set to Completed" type="object"
+                        class="oe_highlight"
+                        invisible="state != 'in_progress'"/>
+            </list>
+        </field>
+    </record>
+
+        <record id="project_milestone_view_form_inherited_ayoki" model="ir.ui.view">
+        <field name="name">project.milestone.view.form.inherit.milestone</field>
+        <field name="model">project.milestone</field>
+        <field name="inherit_id" ref="project.project_milestone_view_form"/>
+        <field name="arch" type="xml">
+              <xpath expr="//field[@name='deadline']" position="after">
+                   <field name="start_date" readonly="project_verified == True  and is_project_modifier == False"/>
+                  <field name="planned_end_date" readonly="project_verified == True  and is_project_modifier == False"/>
+              </xpath>
+             <xpath expr="//field[@name='deadline']" position="before">
+                 <field name="planned_start_date" readonly="project_verified == True  and is_project_modifier == False"/>
+                 <field name="project_verified"  invisible="1"/>
+                 <field name="is_project_modifier"  invisible="1"/>
+                 <field name="weightage" readonly="project_verified == True  and is_project_modifier == False"/>
+                 <field name="weightage_progress" readonly="project_verified == True  and is_project_modifier == False"/>
+                 <field name="weightage_progress" optional="show" readonly="1"
+                                   widget="progressbar" string="Progress Bar"/>
+             </xpath>
+              <xpath expr="//field[@name='deadline']" position="attributes">
+                    <attribute name="string">Planned End Date</attribute>
+                    <attribute name="readonly">project_verified == True  and is_project_modifier == False</attribute>
+              </xpath>
+            <xpath expr="//sheet" position="before">
+                 <header>
+                    <field name="state" widget="statusbar" readonly="1"/>
+                     <button name="action_set_pending" string="Set to Pending" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_set_in_progress" string="Set to In Progress" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'pending'"/>
+                    <button name="action_set_completed" string="Set to Completed" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'in_progress'"/>
+
+                 </header>
+            </xpath>
+        </field>
+        </record>
+
+    <record id="action_vew_milestones" model="ir.actions.act_window">
+        <field name="name">Milestone</field>
+        <field name="res_model">project.milestone</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('project_milestone_view_tree_inherited_alhadeed')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('project_milestone_view_form_alhadeed')})]"/>
+        <field name="help" type="html">
+            <p>
+                View Project Milestones
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            name="Milestone"
+            id="menu_project_milestone_conf"
+            parent="project.menu_project_config"
+            groups="project.group_project_milestone"
+            action="action_vew_milestones"
+            sequence="5"
+    />
+</odoo>

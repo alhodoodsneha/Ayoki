@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_project_form_inherited_asm" model="ir.ui.view">
+        <field name="name">project.project.form.inherit.asm</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="is_project_asset_modifier" invisible="1"/>
+                <field name="is_loc_allocate" invisible="1"/>
+                <field name="_is_asset" invisible="is_project_asset_modifier == False"/>
+                <field name="warehouse_id" readonly="1"/>
+                <field name="location_id" readonly="1"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_run_project" string="Allocate Location" type="object"
+                        invisible="_is_asset != True or is_loc_allocate == True"
+                        class="oe_highlight"/>
+                <button name="action_allot_asset" string="Allot Asset" type="object"
+                        invisible="_is_asset != True"
+                        class="oe_highlight"/>
+            </xpath>
+
+            <xpath expr="//button[@name='project_update_all_action']" position="after">
+                <button name="action_open_stock" type="object"
+                        string="Asset Stock" icon="fa-cubes" invisible="_is_asset != True"
+                        class="btn-primary"
+                />
+                <button name="action_maintenance_request" type="object"
+                        string="Maintenance Request" icon="fa-wrench"
+                        invisible="_is_asset != True"
+                        class="btn-primary"
+                />
+            </xpath>
+            <xpath expr="//button[@name='action_view_tasks']" position="before">
+                <button name="action_view_allot_asset" type="object"
+                        string="Allocated Asset" icon="fa-gears" invisible="_is_asset != True"
+                        class="btn-primary"
+                />
+                 <button name="action_view_allocated_asset" type="object"
+                                string="Internal Transfer"
+                                class="oe_stat_button"
+                               icon="fa-list-ul">
+                          </button>
+
+                <button name="action_view_open_asset_planning" type="object"
+                                string="Asset Planning"
+                                class="oe_stat_button"
+                               icon="fa-bar-chart">
+                          </button>
+            </xpath>
+            <xpath expr="//page[@name='description']" position="after">
+                <page string="Assets" name="project_assets" invisible="_is_asset != True">
+                    <field name="project_qty_ids" widget="one2many">
+                        <list string="Assets" editable="bottom" create="0" delete="0">
+                            <field name="project_id" column_invisible="1"/>
+                            <field name="location_id" column_invisible="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="inventory_quantity_auto_apply" readonly="1"/>
+                            <button name="action_return" string="Return" type="object"
+                                    class="oe_highlight"/>
+                            <button name="action_repair" string="Repair" type="object"
+                                    class="oe_highlight"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_project_stage_view_tree_inherited" model="ir.ui.view">
+        <field name="name">project.project.stage.view.tree.inherited</field>
+        <field name="model">project.project.stage</field>
+        <field name="inherit_id" ref="project.project_project_stage_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="company_id" invisible="1"/>
+<!--                <field name="stage_type"/>-->
+            </xpath>
+        </field>
+    </record>
+</odoo>

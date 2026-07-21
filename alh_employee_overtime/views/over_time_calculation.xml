@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_overtime_calculation_form" model="ir.ui.view">
+        <field name="name">overtime.calculation.form</field>
+        <field name="model">overtime.calculation</field>
+        <field name="arch" type="xml">
+            <form string="Overtime Calculation">
+                <header>
+                    <button name="action_generate"
+                            type="object"
+                            string="Generate"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_approve"
+                            type="object"
+                            string="Approve"
+                            class="btn-success"
+                            invisible="state != 'generated'"/>
+                    <button name="action_reset"
+                            type="object"
+                            string="Reset to Draft"
+                            invisible="state == 'draft'"/>
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,generated,approved"/>
+
+                </header>
+                <sheet>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="all_employee"/>
+                            <field name="employee_id"
+                                   invisible="all_employee"/>
+                        </group>
+
+                    </group>
+
+                    <notebook>
+                        <page string="Overtime">
+                            <field name="line_ids" readonly="state == 'approved'">
+                                <list editable="bottom">
+                                    <field name="employee_id"
+                                           readonly="1"/>
+                                    <field name="department_id"
+                                           readonly="1"/>
+                                    <field name="job_id"
+                                           readonly="1"/>
+                                    <field name="normal_ot"
+                                           readonly="1"/>
+                                    <field name="public_ot"
+                                           readonly="1"/>
+                                    <field name="approved_normal_ot"/>
+                                    <field name="approved_public_ot"/>
+                                    <field name="total_ot"
+                                           readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_overtime_calculation_tree" model="ir.ui.view">
+        <field name="name">overtime.calculation.tree</field>
+        <field name="model">overtime.calculation</field>
+        <field name="arch" type="xml">
+            <list string="Overtime Calculation">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="all_employee"/>
+                <field name="employee_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="view_overtime_calculation_search" model="ir.ui.view">
+        <field name="name">overtime.calculation.search</field>
+        <field name="model">overtime.calculation</field>
+        <field name="arch" type="xml">
+            <search>
+
+                <field name="name"/>
+                <field name="employee_id"/>
+
+                <filter name="draft"
+                        string="Draft"
+                        domain="[('state','=','draft')]"/>
+
+                <filter name="generated"
+                        string="Generated"
+                        domain="[('state','=','generated')]"/>
+
+                <filter name="approved"
+                        string="Approved"
+                        domain="[('state','=','approved')]"/>
+
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_overtime_calculation" model="ir.actions.act_window">
+        <field name="name">Overtime Calculation</field>
+        <field name="res_model">overtime.calculation</field>
+        <field name="view_mode">list,form</field>
+         <field name="search_view_id" ref="view_overtime_calculation_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Overtime
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_overtime_calculation"
+              name="Overtime Calculation"
+              parent="hr_timesheet.timesheet_menu_root"
+              action="action_overtime_calculation"
+              sequence="10"/>
+
+</odoo>

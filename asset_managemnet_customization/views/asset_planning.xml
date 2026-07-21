@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_asset_planning_form" model="ir.ui.view">
+        <field name="name">asset.planning.form</field>
+        <field name="model">asset.planning</field>
+        <field name="arch" type="xml">
+            <form string="Asset Planning">
+                <header>
+                    <button name="action_plan"
+                            string="Plan"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve"
+                            string="Approve"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'planned'"/>
+                    <button name="action_done"
+                            string="Done"
+                            type="object"
+                            class="btn-success"
+                            invisible="state != 'approved'"/>
+                    <button name="action_reset"
+                            string="Reset"
+                            type="object"
+                            invisible="state == 'draft'"/>
+                    <button name="action_cancel"
+                            string="Cancel"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="state == 'done' or state == 'cancel'"/>
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,planned,approved,done"/>
+                </header>
+                <sheet>
+                      <div class="oe_button_box" name="button_box">
+                      </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"
+                                   readonly="state != 'draft'"/>
+                            <field name="planner_id"
+                                   readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="planning_date"
+                                   readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Planning Lines">
+                            <field name="line_ids"
+                                   readonly="state != 'draft'">
+                                <list editable="bottom"
+                                      decoration-danger="has_conflict">
+                                    <field name="asset_id"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="qty"/>
+                                    <field name="days"
+                                           readonly="1"/>
+                                    <field name="estimated_cost"
+                                           readonly="1"/>
+                                    <field name="has_conflict"
+                                           widget="boolean_toggle"
+                                           readonly="1"
+                                           optional="hide"/>
+                                    <field name="conflict_count"
+                                           readonly="1"/>
+                                    <field name="conflict_message"
+                                           optional="hide"
+                                           readonly="1"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="asset_id"/>
+                                            <field name="qty"/>
+                                            <field name="start_date"/>
+                                            <field name="end_date"/>
+                                        </group>
+                                        <group>
+                                            <field name="days"
+                                                   readonly="1"/>
+                                            <field name="estimated_cost"
+                                                   readonly="1"/>
+                                            <field name="remarks"/>
+                                        </group>
+                                    </group>
+                                    <group
+                                        invisible="not has_conflict">
+                                        <field name="conflict_message"
+                                               readonly="1"
+                                               nolabel="1"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+     <record id="view_asset_planning_tree" model="ir.ui.view">
+        <field name="name">asset.planning.tree</field>
+        <field name="model">asset.planning</field>
+        <field name="arch" type="xml">
+            <list string="Asset Planning">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="planner_id"/>
+                <field name="planning_date"/>
+                <field name="state"/>
+
+            </list>
+        </field>
+    </record>
+
+    <record id="view_asset_planning_search" model="ir.ui.view">
+        <field name="name">asset.planning.search</field>
+        <field name="model">asset.planning</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="planner_id"/>
+
+                <filter name="draft"
+                        string="Draft"
+                        domain="[('state','=','draft')]"/>
+
+                <filter name="planned"
+                        string="Planned"
+                        domain="[('state','=','planned')]"/>
+
+                <filter name="approved"
+                        string="Approved"
+                        domain="[('state','=','approved')]"/>
+
+                <filter name="done"
+                        string="Done"
+                        domain="[('state','=','done')]"/>
+
+                <group>
+
+                    <filter string="Project" name="project_filter"
+                            context="{'group_by':'project_id'}"/>
+
+                    <filter string="Planner"  name="planner_filter"
+                            context="{'group_by':'planner_id'}"/>
+
+                    <filter string="Status"  name="status_filter"
+                            context="{'group_by':'state'}"/>
+
+                </group>
+            </search>
+
+        </field>
+    </record>
+
+    <record id="action_asset_planning" model="ir.actions.act_window">
+        <field name="name">Asset Planning</field>
+        <field name="res_model">asset.planning</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_asset_planning_tree"/>
+        <field name="search_view_id" ref="view_asset_planning_search"/>
+        <field name="help" type="html">
+            <p>
+                Create and manage your Asset Planning
+            </p>
+        </field>
+    </record>
+
+
+
+    <menuitem id="menu_asset_planning_main"
+              name="Asset Planning"
+              parent="asset_managemnet_customization.menu_asset_management"
+              action="action_asset_planning"
+              sequence="11"/>
+
+</odoo>

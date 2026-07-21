@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payment_certifacte_form" model="ir.ui.view">
+    <field name="name">payment.certifacte.form</field>
+    <field name="model">payment.certificate</field>
+    <field name="arch" type="xml">
+        <form string="Payment Certificate">
+                <header>
+                      <button name="action_submit_to_client"
+                        string="Submit To Client"
+                              invisible="stage_id != 'draft'"
+                        type="object" class="btn-primary"/>
+                     <button name="action_approve"
+                        string="Client Approved" invisible="stage_id != 'submit_to_client'"
+                        type="object" class="btn btn-success"/>
+                    <button name="action_rejected"
+                        string="Client Rejected" invisible="stage_id != 'submit_to_client'"
+                        type="object" class="btn btn-danger"/>
+                    <field name="stage_id" widget="statusbar"/>
+                </header>
+            <sheet>
+                <div class="oe_button_box" name="button_box">
+                </div>
+                 <div class="oe_title">
+                    <h1>
+                        <field name="name" readonly="1"/>
+                    </h1>
+                </div>
+                  <group>
+                    <group>
+                         <field name="project_id" readonly="stage_id != 'draft'"/>
+                         <field name="partner_id" readonly="stage_id != 'draft'"/>
+                         <field name="requested_date" readonly="stage_id != 'draft'"/>
+                         <field name="requested_percentage" readonly="stage_id != 'draft'"/>
+                         <field name="requested_amount" readonly="stage_id != 'draft'"/>
+                         <field name="building_certificate_date" readonly="stage_id != 'draft'"/>
+                         <field name="rejected_by" readonly="1"/>
+                    </group>
+                      <group>
+                          <field name="requested_by" readonly="1"/>
+                          <field name="project_total_amount" readonly="stage_id != 'draft'"/>
+                          <field name="approved_date" readonly="stage_id != 'submit_to_client'"/>
+                          <field name="approved_percentage" readonly="stage_id != 'submit_to_client'"/>
+                          <field name="approved_amount" readonly="1"/>
+                          <field name="expiry_date" readonly="stage_id != 'draft'"/>
+                           <field name="approved_by" readonly="1"/>
+                      </group>
+                  </group>
+            </sheet>
+             <chatter/>
+        </form>
+    </field>
+    </record>
+
+     <record id="view_payment_certifacte_tree" model="ir.ui.view">
+        <field name="name">payment.certifacte.list</field>
+        <field name="model">payment.certificate</field>
+            <field name="arch" type="xml">
+                <list  string="Payment Certificate">
+                     <field name="name" readonly="stage_id != 'draft'"/>
+                     <field name="project_id" readonly="stage_id != 'draft'"/>
+                    <field name="partner_id" readonly="stage_id != 'draft'"/>
+                    <field name="requested_by" readonly="stage_id != 'draft'"/>
+                    <field name="requested_date" readonly="stage_id != 'draft'"/>
+                    <field name="project_total_amount" readonly="stage_id != 'draft'"/>
+                    <field name="expiry_date" readonly="stage_id != 'draft'"/>
+                    <field name="stage_id" readonly="stage_id != 'draft'"/>
+                </list>
+            </field>
+        </record>
+
+    <record id="view_payment_certifacte_request_search" model="ir.ui.view">
+    <field name="name">payment.certifacte.search.view</field>
+    <field name="model">payment.certificate</field>
+    <field name="arch" type="xml">
+        <search string="Search Payment Certificate">
+            <field name="name"/>
+           <field name="project_id" />
+            <field name="partner_id"/>
+            <field name="requested_by"/>
+            <field name="requested_date"/>
+            <field name="project_total_amount"/>
+            <field name="expiry_date"/>
+            <field name="stage_id"/>
+
+            <!-- Group By -->
+            <group>
+                <filter string="Project"
+                        name="group_by_project"
+                        context="{'group_by':'project_id'}"/>
+
+                <filter string="Customer"
+                        name="group_by_customer"
+                        context="{'group_by':'partner_id'}"/>
+
+                <filter string="Stage"
+                        name="group_by_stage"
+                        context="{'group_by':'stage_id'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+    <record id="payment_certifacte_action" model="ir.actions.act_window">
+        <field name="name">Payment Certificate</field>
+        <field name="res_model">payment.certificate</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_payment_certifacte_request_search"/>
+          <field name="context">{'create': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Payment Certificate
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="payment_certifacte_action"
+              name="Payment Certificate"
+              groups="project.group_project_manager"
+              id="payment_certifacte_action_view_menu"
+              sequence="8"
+              parent="project.menu_main_pm"
+    />
+</odoo>

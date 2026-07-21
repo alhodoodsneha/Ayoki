@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+      <record id="project_task_view_form_inherited_alhodood" model="ir.ui.view">
+        <field name="name">project.task.view.form.inherit.alhodood.enterprise</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//label[@for='date_deadline']" position="before">
+                <field name="planned_start_date"/>
+            </xpath>
+            <xpath expr="//field[@name='milestone_id']" position="after">
+                <field name="milestone_start_date"/>
+                <field name="milestone_end_date"/>
+            </xpath>
+             <xpath expr="//field[@name='user_ids']" position="after">
+                 <field name="start_date" placeholder="Actual Start Date"/>
+                <field name="planned_end_date"/>
+             </xpath>
+            <xpath expr="//div[@id='date_deadline_and_recurring_task']" position="after">
+                 <field name="weightage"/>
+                 <field name="weightage_progress" />
+                <field name="weightage_progress" optional="show"   widget="progressbar" string="Progress Bar"/>
+                 <field name="duration_task"/>
+                 <field name="task_delay"/>
+            </xpath>
+        </field>
+    </record>
+
+
+
+    <record id="project_task_type_form_view_inherited_milestone" model="ir.ui.view">
+        <field name="name">project.task.type.form.inherit.milestone</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_edit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='project_ids']" position="after">
+               <field name="is_done"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_task_type_tree_view_inherited_milestone" model="ir.ui.view">
+        <field name="name">project.task.type.view.tree.inherit.milestone</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_tree_inherited"/>
+        <field name="arch" type="xml">
+            <field name="project_ids" position="after">
+                <field name="is_done"/>
+            </field>
+        </field>
+    </record>
+</odoo>

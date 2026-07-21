@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_timesheet_in_wizard" model="ir.ui.view">
+        <field name="name">timesheet.in.wizard.form</field>
+        <field name="model">timesheet.in.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Timesheet In">
+                <group>
+                    <field name="task_id"/>
+                    <field name="employee_ids" widget="many2many_tags"/>
+                    <field name="start_date"/>
+                </group>
+                <footer>
+                    <button name="action_create_timesheets" type="object" string="Done" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_timesheet_out_wizard" model="ir.ui.view">
+        <field name="name">timesheet.out.wizard.form</field>
+        <field name="model">timesheet.out.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Timesheet Out">
+                <group>
+                    <field name="task_id"/>
+                    <field name="employee_ids" widget="many2many_tags"/>
+                    <field name="end_date"/>
+                </group>
+                <footer>
+                    <button name="action_update_timesheets" type="object" string="Done" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_timesheet_in" model="ir.actions.act_window">
+        <field name="name">Timesheet In</field>
+        <field name="res_model">timesheet.in.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_timesheet_in_wizard"/>
+    </record>
+
+    <record id="action_timesheet_out" model="ir.actions.act_window">
+        <field name="name">Timesheet Out</field>
+        <field name="res_model">timesheet.out.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_timesheet_out_wizard"/>
+    </record>
+    <menuitem id="menu_timesheet_asset"
+              name="Timesheet"
+              parent="menu_asset_management"
+              sequence="12">
+        <menuitem id="menu_timesheet_in" name="In"
+                  action="action_timesheet_in"
+                  sequence="1"/>
+        <menuitem id="menu_timesheet_out" name="Out"
+                  action="action_timesheet_out" sequence="2"/>
+    </menuitem>
+
+
+</odoo>

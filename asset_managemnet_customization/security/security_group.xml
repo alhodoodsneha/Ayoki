@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="res.groups" id="group_project_asset_modifier">
+        <field name="name">Asset Modification</field>
+    </record>
+
+    <record model="res.groups" id="group_approve_asset_request">
+        <field name="name">Asset Request Approver</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    Data file for Contribution Register-->
+    <data noupdate="1">
+         <record id="alh_hr_rule_basic" model="hr.salary.rule">
+            <field name="name">Basic SAL</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">BASIC SAL</field>
+            <field name="category_id" ref="hr_payroll_community.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.wage</field>
+        </record>
+
+        <record id="alh_hr_rule_taxable" model="hr.salary.rule">
+            <field name="name">Gross SAL</field>
+            <field name="sequence" eval="100"/>
+            <field name="code">GROSS SAL</field>
+            <field name="category_id" ref="hr_payroll_community.GROSS"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = categories.BASIC + categories.ALW</field>
+        </record>
+
+        <record id="alh_hr_rule_net" model="hr.salary.rule">
+            <field name="name">Net SAL</field>
+            <field name="sequence" eval="200"/>
+            <field name="code">NET</field>
+            <field name="category_id" ref="hr_payroll_community.NET"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = categories.BASIC + categories.ALW + categories.DED</field>
+            <field name="register_id" ref="hr_payroll_community.contribution_register_employees"/>
+        </record>
+
+         <record id="alh_hr_rule_hra" model="hr.salary.rule">
+            <field name="name">House Rent ALW</field>
+            <field name="sequence" eval="2"/>
+            <field name="code">HRA SAL</field>
+            <field name="category_id" ref="hr_payroll_community.HRA"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.hra</field>
+        </record>
+        <record id="alh_hr_rule_da" model="hr.salary.rule">
+            <field name="name">Dearness ALW</field>
+            <field name="sequence" eval="2"/>
+            <field name="code">DA SAl</field>
+            <field name="category_id" ref="hr_payroll_community.DA"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.da</field>
+        </record>
+
+        <record id="alh_hr_rule_travel" model="hr.salary.rule">
+            <field name="name">Travel ALW</field>
+            <field name="sequence" eval="2"/>
+            <field name="code">Travel ALW</field>
+            <field name="category_id" ref="hr_payroll_community.Travel"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.travel_allowance</field>
+        </record>
+        <record id="alh_hr_rule_meal" model="hr.salary.rule">
+            <field name="name">Meal ALW</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">Meal ALW</field>
+            <field name="category_id" ref="hr_payroll_community.Meal"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.meal_allowance</field>
+        </record>
+        <record id="alh_hr_rule_medical" model="hr.salary.rule">
+            <field name="name">Medical ALW</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">Medical ALW</field>
+            <field name="category_id" ref="hr_payroll_community.Medical"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.medical_allowance</field>
+        </record>
+
+        <record id="alh_hr_rule_other" model="hr.salary.rule">
+            <field name="name">Other ALW</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">Other ALW</field>
+            <field name="category_id" ref="hr_payroll_community.Other"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.other_allowance</field>
+        </record>
+
+        <record id="alh_hr_rule_unpaid" model="hr.salary.rule">
+            <field name="name">Unpaid LEV</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">UNPAID</field>
+            <field name="category_id" ref="hr_payroll_community.DED"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = -(GLOBAL * (contract.wage / 30.0))</field>
+        </record>
+
+         <record id="alh_hr_rule_normal_ot" model="hr.salary.rule">
+            <field name="name">Normal OT</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">NROVT</field>
+            <field name="category_id" ref="hr_payroll_community.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = inputs.NOTM.amount* 1.25*(((contract.wage)/30)/8)</field>
+        </record>
+
+         <record id="alh_hr_rule_input_ot" model="hr.rule.input">
+            <field name="name">Normal OT</field>
+            <field name="code">NOTM</field>
+            <field name="input_id" ref="alh_employee_overtime.alh_hr_rule_normal_ot"/>
+        </record>
+
+
+        <record id="alh_hr_rule_public_ot" model="hr.salary.rule">
+            <field name="name">Public OT</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">PUBOT</field>
+            <field name="category_id" ref="hr_payroll_community.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = inputs.PUBOTM.amount* 1.5*(((contract.wage)/30)/8)</field>
+        </record>
+
+         <record id="alh_hr_rule_input_pubot" model="hr.rule.input">
+            <field name="name">Public OT</field>
+            <field name="code">PUBOTM</field>
+            <field name="input_id" ref="alh_employee_overtime.alh_hr_rule_public_ot"/>
+        </record>
+
+             <!-- Salary Structure -->
+         <record id="alh_structure_base" model="hr.payroll.structure">
+            <field name="code">ALH Salary Structure</field>
+            <field name="name">BASIC SLS</field>
+            <field eval="[(6, 0, [ref('alh_hr_rule_basic'), ref('alh_hr_rule_taxable'),ref('alh_hr_rule_hra'),ref('alh_hr_rule_public_ot'),ref('alh_hr_rule_normal_ot'),ref('alh_hr_rule_unpaid'),ref('alh_hr_rule_other'),ref('alh_hr_rule_medical'),ref('alh_hr_rule_da'),ref('alh_hr_rule_meal'),ref('alh_hr_rule_travel'),ref('alh_hr_rule_net')])]" name="rule_ids"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="parent_id" eval="False"/>
+        </record>
+
+
+    </data>
+</odoo>
