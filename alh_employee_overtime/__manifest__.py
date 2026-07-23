@@ -20,7 +20,7 @@
 
 {
     'name': 'Employee Overtime Management',
-    'version': '19.0.0.2.1',
+    'version': '19.0.0.2.2',
     'category':  'Services/Project',
     'summary': 'Employee Overtime Management',
     'description': 'Employee Overtime Management',

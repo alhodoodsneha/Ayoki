@@ -33,13 +33,11 @@ class HrPayslip(models.Model):
                 ('calculation_id.date_to', '<=', date_to),
             ], limit=1)
 
-            if not ot_line:
-                continue
-            for line in res:
-                if line.get('code') == 'NOTM':
-                    line['amount'] = ot_line.approved_normal_ot
+            if ot_line:
+                for line in res:
+                    if line.get('code') == 'NOTM':
+                        line['amount'] = ot_line.approved_normal_ot
 
-                elif line.get('code') == 'PUBOTM':
-                    line['amount'] = ot_line.approved_public_ot
-
+                    elif line.get('code') == 'PUBOTM':
+                        line['amount'] = ot_line.approved_public_ot
         return res
