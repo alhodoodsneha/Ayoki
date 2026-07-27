@@ -37,7 +37,7 @@ class ProjectTask(models.Model):
 
     milestone_start_date = fields.Date(
         string="Milestone Start Date",
-        related='milestone_id.start_date'
+        related='milestone_id.planned_start_date'
     )
 
     milestone_end_date = fields.Date(

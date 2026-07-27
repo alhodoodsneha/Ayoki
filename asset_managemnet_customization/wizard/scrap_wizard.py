@@ -43,25 +43,21 @@ class MaintenanceScrapWizard(models.TransientModel):
             ('code', '=', 'internal'),
             ('warehouse_id', '=', self.maintenance_id.project_id.warehouse_id.id)
         ], limit=1)
+        move_lines = []
+        move_lines.append((0, 0, {
+            'product_id': self.maintenance_id.asset_id.id,
+            'product_uom_qty':self.scrap_qty,
+        }))
         picking = self.env['stock.picking'].sudo().create({
             'picking_type_id': picking_type.id,
             'location_id': main_loc.id,
             'location_dest_id':scrap_location.id,
             'partner_id': self.maintenance_id.project_id.partner_id.id,
             'scheduled_date': fields.date.today(),
+            'project_id': self.maintenance_id.project_id.id,
+            'move_ids': move_lines
         })
-        move_vals = {
-            'name': self.maintenance_id.asset_id.display_name,
-            'product_id': self.maintenance_id.asset_id.id,
-            'product_uom_qty': self.scrap_qty,
-            'location_id': main_loc.id,
-            'location_dest_id': scrap_location.id,
-            'picking_id': picking.id,
-        }
-
-        self.env['stock.move'].create(move_vals)
         picking.action_confirm()
-        picking.action_assign()
         picking.button_validate()
         self.maintenance_id.scrap_qty = self.scrap_qty + self.maintenance_id.scrap_qty
         if self.maintenance_id.quantity == self.scrap_qty:

@@ -64,3 +64,4 @@ class ReturnWizard(models.TransientModel):
             'move_ids': move_lines,
         })
         picking.action_confirm()
+        picking.button_validate()

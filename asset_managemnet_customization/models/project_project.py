@@ -169,6 +169,9 @@ class Project(models.Model):
             'view_mode': 'list,form',
             'domain': [('project_id', '=', self.id)],
             'target': 'current',
+            'context': {
+                'default_project_id': self.id,
+            }
         }
 
 

@@ -24,7 +24,7 @@
                             <field name="deadline" readonly="project_verified == True  and is_project_modifier == False" string="Planned End Date"/>
                             <field name="start_date" readonly="project_verified == True  and is_project_modifier == False"/>
                             <field name="planned_end_date" optional="show" readonly="project_verified == True  and is_project_modifier == False"/>
-                            <field name="weightage" readonly="project_verified == True  and is_project_modifier == False"/>
+                            <field name="weightage" readonly="project_verified == True  and is_project_modifier == False" sum="Total Weightage"/>
                             <field name="duration" readonly="1"/>
                              <field name="weightage_progress" optional="show" readonly="1"/>
                              <field name="weightage_progress" optional="show"   widget="progressbar" string="Progress Bar"/>

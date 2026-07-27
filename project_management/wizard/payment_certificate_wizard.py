@@ -42,12 +42,20 @@ class PaymentCertificateWizard(models.TransientModel):
         if self.requested_percentage > pending_percentage:
             raise UserError(_("Requested Percentage Is Greater Than Actual Pending percentage !!.."))
 
-        self.env['payment.certificate'].create({
+        payment_id =self.env['payment.certificate'].create({
             'project_id':self.project_id.id,
             'requested_date':fields.Date.today(),
             'requested_percentage':self.requested_percentage,
         })
         self.project_id.bill_created = True
+        return {
+            'name': 'Payment Certificate',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'payment.certificate',
+            'domain': [('id', '=', payment_id.id)],
+            'type': 'ir.actions.act_window',
+        }
 
 
 

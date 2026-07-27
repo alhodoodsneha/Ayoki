@@ -31,6 +31,7 @@
         'data/ir_sequence.xml',
         'security/ir.model.access.csv',
         'views/over_time_calculation.xml',
+        'views/hr_contract.xml',
     ],
     'demo': [
     ],

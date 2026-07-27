@@ -48,7 +48,7 @@
                     </group>
                     <notebook>
                         <page string="Allot Lines" name="asset_lot_lines_ids">
-                            <field name="asset_lot_ids" widget="one2many">
+                            <field name="asset_lot_ids" widget="one2many" readonly="stage in ['approved','rejected']">
                                 <list string="Allot Lines" editable="bottom">
                                     <field name="asset_allot_id" column_invisible="1"/>
                                     <field name="is_asset_modifier" column_invisible="1"/>

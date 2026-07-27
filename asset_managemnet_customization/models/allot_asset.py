@@ -197,6 +197,7 @@ class AllotAsset(models.Model):
             'move_ids': move_lines
         })
         picking.action_confirm()
+        picking.button_validate()
         self.stage = 'approved'
         if self.requested_by.partner_id.email:
             base_url = self.env['ir.config_parameter'].sudo().get_param(
