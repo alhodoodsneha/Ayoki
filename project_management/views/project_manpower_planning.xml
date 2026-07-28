@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+          <record id="view_project_manpower_planning_form" model="ir.ui.view">
+        <field name="name">project.manpower.planning.form</field>
+        <field name="model">project.manpower.planning</field>
+        <field name="arch" type="xml">
+            <form string="Manpower Planning">
+                    <header>
+                          <button name="action_approve"
+                            string="Approve"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                         <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,planned,approved,done"/>
+                    </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                      <group>
+                        <group>
+                            <field name="project_id"  readonly="state != 'draft'"/>
+                            <field name="partner_id" readonly="1"/>
+                        </group>
+
+                        <group>
+                            <field name="project_start_date" readonly="1"/>
+                            <field name="project_end_date" readonly="1"/>
+                            <field name="company_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="create_user_id" readonly="1"/>
+                        </group>
+
+                        <group>
+                            <field name="create_on_date" readonly="1"/>
+                        </group>
+                    </group>
+                     <notebook>
+                        <page string="Manpower Planning">
+                            <field name="line_ids"  readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="employee_id"/>
+                                    <field name="planned_start"/>
+                                    <field name="planned_end"/>
+                                </list>
+                            </field>
+
+                        </page>
+
+                    </notebook>
+                </sheet>
+                 <chatter/>
+            </form>
+        </field>
+        </record>
+
+     <record id="view_project_manpower_planning_tree" model="ir.ui.view">
+        <field name="name">project.manpower.planning.list</field>
+        <field name="model">project.manpower.planning</field>
+            <field name="arch" type="xml">
+                <list  string="Manpower Planning">
+                   <field name="project_id"/>
+                    <field name="partner_id"/>
+                    <field name="project_start_date"/>
+                    <field name="project_end_date"/>
+                    <field name="create_user_id"/>
+                    <field name="create_on_date"/>
+                     <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+    <record id="view_project_manpower_planning_search" model="ir.ui.view">
+    <field name="name">project.manpower.planning.search.view</field>
+    <field name="model">project.manpower.planning</field>
+    <field name="arch" type="xml">
+        <search string="Search Manpower Planning">
+              <!-- Search Fields -->
+            <field name="project_id"/>
+            <field name="partner_id"/>
+            <field name="create_user_id"/>
+             <field name="state"/>
+            <!-- Group By -->
+            <group>
+                     <filter name="group_project"
+                        string="Project"
+                        context="{'group_by':'project_id'}"/>
+
+                <filter name="group_customer"
+                        string="Customer"
+                        context="{'group_by':'partner_id'}"/>
+
+                <filter name="group_creator"
+                        string="Created By"
+                        context="{'group_by':'create_user_id'}"/>
+                <filter name="group_state"
+                        string="State"
+                        context="{'group_by':'state'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+    <record id="project_manpower_planning_action" model="ir.actions.act_window">
+        <field name="name">Manpower Planning</field>
+        <field name="res_model">project.manpower.planning</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_project_manpower_planning_search"/>
+          <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Manpower Planning
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="project_manpower_planning_action"
+              name="Manpower Planning"
+              groups="project.group_project_manager,project.group_project_user"
+              id="project_manpower_planning_view_menu"
+              sequence="4"
+              parent="project.menu_main_pm"
+    />
+
+
+
+</odoo>

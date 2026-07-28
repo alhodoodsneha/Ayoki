@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_project_absent_employee_form" model="ir.ui.view">
+    <field name="name">project.absent.employee.form</field>
+    <field name="model">project.absent.employee</field>
+    <field name="arch" type="xml">
+        <form string="Absent Employees">
+                <header>
+                </header>
+            <sheet>
+                <div class="oe_button_box" name="button_box">
+                </div>
+                  <group>
+                        <group>
+                            <field name="date" readonly="1"/>
+                            <field name="project_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="employee_id" readonly="1"/>
+                            <field name="company_id" readonly="1"/>
+                        </group>
+                    </group>
+            </sheet>
+             <chatter/>
+        </form>
+    </field>
+    </record>
+
+     <record id="view_project_absent_employee_tree" model="ir.ui.view">
+        <field name="name">project.absent.employee.list</field>
+        <field name="model">project.absent.employee</field>
+            <field name="arch" type="xml">
+                <list  string="Absent Employees">
+                    <field name="date" readonly="1"/>
+                    <field name="project_id" readonly="1"/>
+                    <field name="employee_id" readonly="1"/>
+                    <field name="company_id" readonly="1" />
+                </list>
+            </field>
+        </record>
+
+    <record id="view_project_absent_employee_search" model="ir.ui.view">
+    <field name="name">project.absent.employee.search.view</field>
+    <field name="model">project.absent.employee</field>
+    <field name="arch" type="xml">
+        <search string="Search Absent Employees">
+             <field name="employee_id"/>
+            <field name="project_id"/>
+            <field name="date"/>
+
+             <filter name="today"
+                        string="Today"
+                        domain="[('date', '=','today')]"/>
+            <!-- Group By -->
+            <group>
+                  <filter name="group_date"
+                            string="Date"
+                            context="{'group_by':'date'}"/>
+
+                 <filter name="group_project"
+                            string="Project"
+                            context="{'group_by':'project_id'}"/>
+                    <filter name="group_employee"
+                            string="Employee"
+                            context="{'group_by':'employee_id'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+    <record id="project_absent_employee_action" model="ir.actions.act_window">
+        <field name="name">Absent Employees</field>
+        <field name="res_model">project.absent.employee</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_project_absent_employee_search"/>
+          <field name="context">{'create': False ,'delete':False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Absent Employees
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="project_absent_employee_action"
+              name="Absent Employees"
+              id="project_absent_employee_view_menu"
+              sequence="8"
+              parent="hr_timesheet.timesheet_menu_root"
+    />
+
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_project_employee_allocate_wizard" model="ir.ui.view">
+        <field name="name">project.employee.allocate.wizard.form</field>
+        <field name="model">project.employee.allocate.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Employee Allocation">
+                <group>
+                    <field name="action"/>
+                    <field name="employee_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_confirm"
+                            type="object"
+                            string="Confirm"
+                            class="btn-primary"/>
+                    <button string="Cancel"
+                            special="cancel"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+
+      <record id="action_project_employee_allocate_wizard" model="ir.actions.act_window">
+        <field name="name">Employee Allocation</field>
+        <field name="res_model">project.employee.allocate.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_project_employee_allocate_wizard"/>
+        <field name="target">new</field>
+        <field name="context"></field>
+    </record>
+
+</odoo>

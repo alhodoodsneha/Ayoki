@@ -1,4 +1,10 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_payment_certificate,payment.certificate,model_payment_certificate,base.group_user,1,1,1,1
 access_payment_certificate_wizard,payment.certificate.wizard,model_payment_certificate_wizard,base.group_user,1,1,1,1
-
+access_project_employee_allocate_wizard,project.employee.allocate.wizard,model_project_employee_allocate_wizard,base.group_user,1,1,1,1
+access_project_absent_employee,project.absent.employee,model_project_absent_employee,base.group_user,1,1,1,1
+access_project_manpower_planning,project.manpower.planning,model_project_manpower_planning,base.group_user,1,1,1,1
+access_project_manpower_planning_line,project.manpower.planning.line,model_project_manpower_planning_line,base.group_user,1,1,1,1
+access_bulk_timesheet_wizard,bulk.timesheet.wizard,model_bulk_timesheet_wizard,base.group_user,1,1,1,1
+access_bulk_timesheet_wizard_line,bulk.timesheet.wizard.line,model_bulk_timesheet_wizard_line,base.group_user,1,1,1,1
+access_manpower_report_wizard,manpower.report.wizard,model_manpower_report_wizard,base.group_user,1,1,1,1

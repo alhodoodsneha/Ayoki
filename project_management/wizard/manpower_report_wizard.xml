@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_manpower_report_wizard_form" model="ir.ui.view">
+        <field name="name">manpower.report.wizard.form</field>
+        <field name="model">manpower.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Manpower Report">
+                <group>
+                    <group>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                    </group>
+                    <group>
+                        <field name="project_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_print_report" string="Print" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_manpower_report_wizard" model="ir.actions.act_window">
+        <field name="name">Manpower Report</field>
+        <field name="res_model">manpower.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+     <menuitem id="menu_manpower_report_root"
+              name="Manpower Report"
+              parent="hr_timesheet.timesheet_menu_root"
+              action="action_manpower_report_wizard"
+              sequence="12"/>
+
+   <record id="server_action_project_manpower_report" model="ir.actions.server">
+    <field name="name">Manpower Report</field>
+    <field name="model_id" ref="project.model_project_project"/>
+    <field name="binding_model_id" ref="project.model_project_project"/>
+    <field name="binding_view_types">form</field>
+    <field name="state">code</field>
+    <field name="code">
+        action = {
+            'type': 'ir.actions.act_window',
+            'name': 'Manpower Report',
+            'res_model': 'manpower.report.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_project_ids': [(6, 0, records.ids)],
+            },
+        }
+    </field>
+</record>
+
+</odoo>

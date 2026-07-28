@@ -5,4 +5,10 @@
         <field name="name">Milestone Modification</field>
     </record>
 
+     <record model="res.groups" id="group_project_employee_modifier">
+        <field name="name">Employee Allocation</field>
+    </record>
+
+
+
 </odoo>

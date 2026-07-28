@@ -20,7 +20,7 @@
 
 {
     'name': 'Project Management',
-    'version': '19.0.0.0.2',
+    'version': '19.0.0.0.3',
     'category':  'Services/Project',
     'summary': 'Project Management',
     'description': 'Project Management',
@@ -34,8 +34,14 @@
         'views/project_project.xml',
         'views/payment_certificate.xml',
         'views/project_milestone.xml',
+        'views/hr_job.xml',
         'views/project_task.xml',
+        'views/project_absent_employee.xml',
+        'views/project_manpower_planning.xml',
         'wizard/payment_certificate_wizard.xml',
+        'wizard/employee_allocation_wizard.xml',
+        'wizard/bulk_timesheet_update.xml',
+        'wizard/manpower_report_wizard.xml',
     ],
     'demo': [
     ],

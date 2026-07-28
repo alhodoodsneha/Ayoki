@@ -17,7 +17,33 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-from . import payment_certificate_wizard
-from . import employee_allocation_wizard
-from . import bulk_timesheet_update
-from . import manpower_report_wizard
+from odoo.exceptions import UserError
+from odoo import api, models, fields,_
+
+class ProjectAbsentEmployee(models.Model):
+    _name = "project.absent.employee"
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = "Project Absent Employee"
+    _rec_name = 'project_id'
+    _order = "date desc"
+
+    employee_id = fields.Many2one(
+        "hr.employee",
+        required=True,
+        ondelete="cascade",
+    )
+
+    project_id = fields.Many2one(
+        "project.project",
+        required=True,
+        ondelete="cascade",
+    )
+
+    date = fields.Date(
+        required=True,
+    )
+
+    company_id = fields.Many2one(
+        "res.company",
+        default=lambda self: self.env.company,
+    )

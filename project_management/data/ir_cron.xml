@@ -8,5 +8,15 @@
     <field name="interval_number">1</field>
     <field name="interval_type">days</field>
     <field name="active">True</field>
-</record>
+   </record>
+
+    <record id="ir_cron_project_absent_employee" model="ir.cron">
+        <field name="name">Project Absent Employee Check</field>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_check_project_absent_employees()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
 </odoo>

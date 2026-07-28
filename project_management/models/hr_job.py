@@ -17,7 +17,19 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-from . import payment_certificate_wizard
-from . import employee_allocation_wizard
-from . import bulk_timesheet_update
-from . import manpower_report_wizard
+from odoo import api, models, fields,_
+
+class HrJob(models.Model):
+    _inherit = 'hr.job'
+
+    manpower_category = fields.Selection(
+        selection=[
+            ('staff', 'Staff'),
+            ('worker', 'Worker'),
+        ],
+        string='Manpower Category',
+        help="Classifies this Job Position as Staff or Worker for the "
+             "Manpower Report. Job Positions left blank are ignored by "
+             "the report.",
+        tracking=True
+    )

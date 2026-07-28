@@ -19,5 +19,10 @@
 #############################################################################
 from . import project_project
 from . import project_milestone
+from . import hr_job
 from . import project_task
 from . import payment_certificate
+from . import project_absent_employee
+from . import project_manpower_planning
+
+

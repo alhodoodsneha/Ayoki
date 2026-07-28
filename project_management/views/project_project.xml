@@ -63,16 +63,25 @@
               </xpath>
              <xpath expr="//field[@name='user_id']" position="after">
                  <field name="lpo_reference" />
+                   <field name="done_project"  invisible="1"/>
                  <field name="weightage_progress"/>
                  <field name="weightage_progress" widget="progressbar" string="Progress Bar"/>
                  <field name="bill_created" invisible="1"/>
                  <field name="project_total_amount" readonly="bill_created == True"/>
                  <field name="bill_percentage" readonly="1"/>
              </xpath>
+             <xpath expr="//field[@name='partner_id']" position="after">
+                  <field name="employee_ids"  widget="many2many_tags" readonly="1"/>
+             </xpath>
                <xpath expr="//button[@name='action_open_share_project_wizard']" position="after">
                    <button name="action_create_payment_certificate"
                         string="Create Payment Certificate"
                         type="object" class="btn-primary"/>
+
+                   <button name="action_allocate_employee"
+                        string="Employee Allocation"
+                        type="object" class="btn-primary"/>
+
                </xpath>
             <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
                  <button name="action_view_payment_certificate" type="object"
@@ -80,8 +89,34 @@
                         class="oe_stat_button"
                        icon="fa-money">
                 </button>
+
+                <button name="action_view_project_manpower_planing" type="object"
+                        string="Manpower Planning"
+                        class="oe_stat_button"
+                       icon="fa-users">
+                </button>
+
+                <button name="action_view_absent_employee" type="object"
+                        string="Absent Employees"
+                        class="oe_stat_button"
+                       icon="fa-user-times">
+                </button>
             </xpath>
         </field>
     </record>
+
+
+     <record id="project_project_stage_view_tree_inherited" model="ir.ui.view">
+        <field name="name">project.project.stage.view.list.inherited</field>
+        <field name="model">project.project.stage</field>
+        <field name="inherit_id" ref="project.project_project_stage_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="done_project" />
+            </xpath>
+        </field>
+    </record>
+
+
 
 </odoo>

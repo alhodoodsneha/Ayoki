@@ -19,6 +19,7 @@
 #############################################################################
 from odoo.exceptions import UserError
 from odoo import api, models, fields,_
+from datetime import timedelta
 
 
 class Project(models.Model):
@@ -48,6 +49,20 @@ class Project(models.Model):
         string="Lpo Reference No"
     )
 
+    employee_ids = fields.Many2many(
+        "hr.employee",
+        "project_employee_rel",
+        "project_id",
+        "employee_id",
+        string="Allocated Employees",
+    )
+
+    done_project = fields.Boolean(
+        string="Done",
+        related='stage_id.done_project',
+    )
+
+
     @api.depends(
         'milestone_ids.weightage_progress',
         'milestone_ids.weightage'
@@ -65,6 +80,42 @@ class Project(models.Model):
             else:
                 project.weightage_progress = 0.0
 
+    def action_allocate_employee(self):
+        return {
+            "name": "Allocate Employee",
+            "type": "ir.actions.act_window",
+            "res_model": "project.employee.allocate.wizard",
+            "view_mode": "form",
+            "target": "new",
+            "context": {
+                "default_project_id": self.id,
+                "default_action": "allocate",
+            },
+        }
+
+    def action_view_project_manpower_planing(self):
+        return {
+            "name": "Manpower Planning",
+            'view_type': 'list',
+            'view_mode': 'list,form',
+            "res_model": "project.manpower.planning",
+            'domain': [('project_id', '=', self.id)],
+            'type': 'ir.actions.act_window',
+            'context': {'default_project_id': self.id}
+        }
+
+    def action_view_absent_employee(self):
+        return {
+            "name": "Absent Employee",
+            'view_type': 'list',
+            'view_mode': 'list,form',
+            "res_model": "project.absent.employee",
+            'domain': [('project_id', '=', self.id)],
+            'type': 'ir.actions.act_window',
+            'context': {'default_project_id': self.id}
+        }
+
+
     def action_create_payment_certificate(self):
         requested_percentage = 100 - self.bill_percentage
         return {
@@ -74,14 +125,12 @@ class Project(models.Model):
             'view_mode': 'form',
             'target': 'new',
             'context': {'default_project_id': self.id,
-                        'default_requested_percentage':requested_percentage,
+                        'default_requested_percentage': requested_percentage,
                         }
         }
 
+
     def action_view_payment_certificate(self):
-        if self.bill_percentage >=100:
-            raise UserError(
-                _("100 % Invoiced  !!.."))
         return {
             'name': 'Payment Certificate',
             'type': 'ir.actions.act_window',
@@ -89,5 +138,42 @@ class Project(models.Model):
             'view_mode': 'list,form',
             'domain': [('project_id', '=', self.id)],
             'target': 'current',
+            'context': {'create': False,
+                        'delete': False,
+                        }
         }
 
+    @api.model
+    def cron_check_project_absent_employees(self):
+        yesterday = fields.Date.today() - timedelta(days=1)
+        projects = self.search([
+            ('employee_ids', '!=', False),('done_project','!=',True)
+        ])
+        AnalyticLine = self.env['account.analytic.line']
+        Absent = self.env['project.absent.employee']
+
+        for project in projects:
+            for employee in project.employee_ids:
+                timesheet = AnalyticLine.search_count([
+                    ('employee_id', '=', employee.id),
+                    ('project_id', '=', project.id),
+                    ('date', '=', yesterday),
+                ])
+                if not timesheet:
+                    exists = Absent.search_count([
+                        ('employee_id', '=', employee.id),
+                        ('project_id', '=', project.id),
+                        ('date', '=', yesterday),
+                    ])
+                    if not exists:
+                        Absent.create({
+                            'employee_id': employee.id,
+                            'project_id': project.id,
+                            'date': yesterday,
+                        })
+
+
+class ProjectProjectStage(models.Model):
+    _inherit = 'project.project.stage'
+
+    done_project = fields.Boolean(string="Closed Stage",default=False)

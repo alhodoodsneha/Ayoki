@@ -1,0 +1,11 @@
+Project Name,Ayoki,,,
+,,,,
+Duration,,,,
+,,,,
+,,,,
+Date,Module,Feature / Sub Module,"Type [Development, Improvement , Change Request, New Feature,  Bug]",Notes
+17/07/2026,Project,"project milestone creation, milestone view in project, progress tracking using weight, project payment certificate creation.",Development,
+17/07/2026,Overtime,Overtime calculation and payroll structure creation,Development,
+21/07/2026,Project,"changes in the view , ",Improvement,
+21/07/2026,Asset Management,"Asset management in project . Product as asset, asset tracking , transfer and maintenance",Development,
+27/07/2026,man power,"Manpower planning and manpower report , bulk time sheet upload",Development,
